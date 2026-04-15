@@ -11,35 +11,39 @@ func TestNewNotification(t *testing.T) {
 		name    string
 		id      string
 		userID  string
-		email   string
+		target  string
 		message string
+		channel Channel
 	}{
 		{
 			name:    "builds notification with provided fields",
 			id:      "notification-123",
 			userID:  "user-123",
-			email:   "user@example.com",
+			target:  "user@example.com",
 			message: "welcome",
+			channel: EmailChannel,
 		},
 		{
 			name:    "preserves empty values because constructor does not validate",
 			id:      "",
 			userID:  "",
-			email:   "",
+			target:  "",
 			message: "",
+			channel: SMSChannel,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewNotification(tt.id, tt.userID, tt.email, tt.message)
+			got, err := NewNotification(tt.id, tt.userID, tt.target, tt.message, tt.channel)
 
 			assert.NoError(t, err)
 			assert.NotNil(t, got)
 			assert.Equal(t, tt.id, got.Id)
 			assert.Equal(t, tt.userID, got.UserId)
-			assert.Equal(t, tt.email, got.Email)
+			assert.Equal(t, tt.target, got.Target)
 			assert.Equal(t, tt.message, got.Message)
+			assert.Equal(t, tt.channel, got.Channel)
 			assert.Equal(t, Pending, got.Status)
 		})
 	}

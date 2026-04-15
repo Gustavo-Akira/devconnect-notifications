@@ -3,16 +3,25 @@ package domain
 type Notification struct {
 	Id      string
 	UserId  string
-	Email   string
+	Target  string
 	Message string
+	Channel Channel
 	Status  Status
 }
 
-func NewNotification(id, userID, email, message string) (*Notification, error) {
+type Channel string
+
+const (
+	EmailChannel Channel = "EMAIL"
+	SMSChannel   Channel = "SMS"
+)
+
+func NewNotification(id, userID, target, message string, channel Channel) (*Notification, error) {
 	return &Notification{
 		Id:      id,
 		UserId:  userID,
-		Email:   email,
+		Target:  target,
+		Channel: channel,
 		Message: message,
 		Status:  Pending,
 	}, nil
